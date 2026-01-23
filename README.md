@@ -8,7 +8,7 @@ commonly adopted in modern AI agent architectures.
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
 - Local Large Language Model (LLM) inference using **Ollama**
 - Retrieval-Augmented Generation (RAG) for factual and grounded answers
@@ -19,7 +19,7 @@ commonly adopted in modern AI agent architectures.
 
 ---
 
-## 🧠 Technology Stack
+##  Technology Stack
 
 | Component | Tool |
 |--------|------|

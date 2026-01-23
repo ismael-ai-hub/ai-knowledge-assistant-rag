@@ -32,5 +32,5 @@ commonly adopted in modern AI agent architectures.
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 

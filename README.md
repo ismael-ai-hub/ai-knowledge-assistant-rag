@@ -1,31 +1,36 @@
-# AI Knowledge Assistant with RAG
+# AI Knowledge Assistant with RAG (Local & Free)
 
-This project implements a Retrieval-Augmented Generation (RAG) system using Large Language Models (LLMs).
-It allows users to ask questions over their own documents (PDFs or text files) and receive grounded answers
-based on retrieved knowledge.
+This project implements a Retrieval-Augmented Generation (RAG) system that allows users to query their own documents
+(PDFs or text files) and receive grounded, context-aware answers.
 
-## Features
-- Document ingestion (PDF, text)
-- Text chunking and embeddings
-- Vector database using ChromaDB
-- Retrieval-Augmented Generation (RAG)
-- Question answering with source references
-- REST API built with FastAPI
+The system is designed to be **100% local**, **cost-free**, and **enterprise-oriented**, using open-source tools
+commonly adopted in modern AI agent architectures.
 
-## Tech Stack
-- Python
-- LangChain / LlamaIndex
-- OpenAI API or Hugging Face
-- ChromaDB
-- FastAPI
+---
 
-## Project Status
-🚧 In progress — currently implementing document ingestion and vector storage.
+## 🚀 Key Features
 
-## Goals
-- Improve factual accuracy and reduce hallucinations
-- Explore prompt engineering and retrieval strategies
-- Build a modular and maintainable AI system
+- Local Large Language Model (LLM) inference using **Ollama**
+- Retrieval-Augmented Generation (RAG) for factual and grounded answers
+- Vector-based semantic search with **ChromaDB**
+- Open-source embeddings from **Hugging Face**
+- PDF document ingestion and indexing
+- No external APIs or paid services required
 
-## Author
-Ismael
+---
+
+## 🧠 Technology Stack
+
+| Component | Tool |
+|--------|------|
+| LLM | Ollama (Mistral / LLaMA) |
+| Embeddings | sentence-transformers (Hugging Face) |
+| Vector Database | ChromaDB |
+| RAG Framework | LangChain |
+| Document Loader | PyPDF |
+| Language | Python |
+
+---
+
+## 📁 Project Structure
+

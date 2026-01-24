@@ -1,37 +1,33 @@
 """
-AI Knowledge Assistant - PDF Ingestion & Embeddings
+AI Knowledge Assistant - PDF Ingestion (Local & Free)
 Author: Ismael
 Description:
 - Load PDF documents
-- Split text into semantic chunks
-- Generate embeddings using Hugging Face
-- Store vectors locally in ChromaDB
+- Split text into chunks
+- Create embeddings using Hugging Face
+- Store vectors in ChromaDB (local)
 """
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
-from PyPDF2 import PdfReader
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma
+from pypdf import PdfReader
 import os
 
 # ---------- Configuration ----------
-DATA_DIR = "data"
-VECTORSTORE_DIR = "vectorstore"
-EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+PDF_PATH = "data/example.pdf"   # place your PDF file here
+CHROMA_DB_DIR = "chroma_db"
+COLLECTION_NAME = "pdf_docs"
 
-# ---------- Step 1: Load PDFs ----------
-documents = []
+# ---------- Step 1: Load PDF ----------
+reader = PdfReader(PDF_PATH)
+raw_text = ""
 
-for file in os.listdir(DATA_DIR):
-    if file.endswith(".pdf"):
-        pdf_path = os.path.join(DATA_DIR, file)
-        reader = PdfReader(pdf_path)
-        text = ""
-        for page in reader.pages:
-            text += page.extract_text()
-        documents.append(text)
+for page in reader.pages:
+    if page.extract_text():
+        raw_text += page.extract_text()
 
-print(f"Loaded {len(documents)} PDF(s)")
+print("PDF loaded successfully.")
 
 # ---------- Step 2: Split text ----------
 text_splitter = RecursiveCharacterTextSplitter(
@@ -39,24 +35,22 @@ text_splitter = RecursiveCharacterTextSplitter(
     chunk_overlap=50
 )
 
-chunks = []
-for doc in documents:
-    chunks.extend(text_splitter.split_text(doc))
+chunks = text_splitter.split_text(raw_text)
+print(f"Number of text chunks: {len(chunks)}")
 
-print(f"Generated {len(chunks)} text chunks")
-
-# ---------- Step 3: Embeddings (Hugging Face) ----------
+# ---------- Step 3: Create embeddings (Hugging Face) ----------
 embeddings = HuggingFaceEmbeddings(
-    model_name=EMBEDDING_MODEL
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
 # ---------- Step 4: Store in ChromaDB ----------
 vectorstore = Chroma.from_texts(
     texts=chunks,
     embedding=embeddings,
-    persist_directory=VECTORSTORE_DIR
+    persist_directory=CHROMA_DB_DIR,
+    collection_name=COLLECTION_NAME
 )
 
 vectorstore.persist()
 
-print("Documents successfully ingested and stored in ChromaDB")
+print("PDF ingested and stored in ChromaDB successfully!")

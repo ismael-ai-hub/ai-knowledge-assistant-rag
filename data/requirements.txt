@@ -1,8 +1,8 @@
 langchain
 langchain-community
 langchain-text-splitters
-faiss-cpu
+chromadb
 sentence-transformers
-ollama
 pypdf
 python-dotenv
+ollama

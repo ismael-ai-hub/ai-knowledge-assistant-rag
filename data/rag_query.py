@@ -9,6 +9,9 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.llms import Ollama
 from langchain.chains import RetrievalQA
 
+CHROMA_DB_DIR = "chroma_db"
+COLLECTION_NAME = "pdf_docs"
+
 # ---------- Step 1: Load embeddings ----------
 embedding_model = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
@@ -16,9 +19,9 @@ embedding_model = HuggingFaceEmbeddings(
 
 # ---------- Step 2: Load vector store ----------
 vector_store = Chroma(
-    collection_name="pdf_docs",
+    collection_name=COLLECTION_NAME,
     embedding_function=embedding_model,
-    persist_directory="./vectorstore/chroma"
+    persist_directory=CHROMA_DB_DIR
 )
 
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})

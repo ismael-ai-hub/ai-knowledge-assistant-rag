@@ -1,8 +1,13 @@
 langchain
+langchain-core
 langchain-community
 langchain-text-splitters
-chromadb
+langchain-huggingface
+langchain-chroma
+langchain-ollama
 sentence-transformers
+chromadb
 pypdf
+fastapi
+uvicorn
 python-dotenv
-ollama

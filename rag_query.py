@@ -4,52 +4,117 @@ Author: Ismael
 Description: Query a local ChromaDB vector store and generate answers using a local LLM via Ollama.
 """
 
-from langchain.vectorstores import Chroma
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.llms import Ollama
-from langchain.chains import RetrievalQA
+
+from langchain_chroma import Chroma
+from langchain_ollama import OllamaLLM
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_core.prompts import ChatPromptTemplate
+
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
 
 CHROMA_DB_DIR = "chroma_db"
 COLLECTION_NAME = "pdf_docs"
 
-# ---------- Step 1: Load embeddings ----------
-embedding_model = HuggingFaceEmbeddings(
+embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# ---------- Step 2: Load vector store ----------
 vector_store = Chroma(
     collection_name=COLLECTION_NAME,
-    embedding_function=embedding_model,
+    embedding_function=embeddings,
     persist_directory=CHROMA_DB_DIR
 )
 
 retriever = vector_store.as_retriever(search_kwargs={"k": 3})
 
-# ---------- Step 3: Load local LLM via Ollama ----------
-llm = Ollama(
+llm = OllamaLLM(
     model="mistral",
     temperature=0.2
 )
 
-# ---------- Step 4: Build RAG pipeline ----------
-qa_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    retriever=retriever,
-    return_source_documents=True
-)
+prompt = ChatPromptTemplate.from_template("""
+Tu es un assistant pédagogique.
 
-# ---------- Step 5: Interactive query ----------
+Règles obligatoires :
+- Réponds UNIQUEMENT à la question de l'utilisateur (pas aux questions présentes dans le document).
+- N'invente rien. Utilise uniquement le CONTEXTE fourni.
+- Si la réponse n'est pas dans le contexte, réponds : "Je ne sais pas."
+- Si l'utilisateur demande "oui ou non", réponds uniquement par "Oui" ou "Non" (un seul mot).
+
+HISTORIQUE (pour comprendre la conversation) :
+{history}
+
+CONTEXTE :
+{context}
+
+QUESTION UTILISATEUR :
+{question}
+
+RÉPONSE :
+""")
+
+history = []  # list of tuples (user_question, assistant_answer)
+
 while True:
-    query = input("\nAsk a question (or type 'exit'): ")
+    query = input("\nAsk a question (or type 'exit'): ").strip()
     if query.lower() == "exit":
         break
 
-    result = qa_chain(query)
+    # Détection oui / non
+    yes_no_mode = "oui ou non" in query.lower() or "yes or no" in query.lower()
 
-    print("\nAnswer:")
-    print(result["result"])
+    # Récupération des documents
+    docs = retriever.invoke(query)
 
-    print("\nSources:")
-    for doc in result["source_documents"]:
-        print("-", doc.metadata)
+    print("\nTop sources used:")
+    seen = set()
+    shown = 0
+    for d in docs:
+        src = d.metadata.get("source", "unknown")
+        ch = d.metadata.get("chunk", "?")
+        key = (src, ch)
+        if key in seen:
+            continue
+        seen.add(key)
+
+        snippet = (d.page_content[:180] + "...").replace("\n", " ")
+        print(f"- {src} (chunk {ch}): {snippet}")
+        shown += 1
+        if shown == 3:
+            break
+
+    # Construction du contexte
+    context = "\n\n".join(doc.page_content for doc in docs)
+
+    # Historique (mémoire)
+    history_text = "\n".join(
+        [f"User: {u}\nAssistant: {a}" for u, a in history][-6:]
+    )
+
+    # Appel du LLM
+    answer = llm.invoke(
+        prompt.format(
+            context=context,
+            question=query,
+            history=history_text
+        )
+    )
+
+    # Post-traitement oui / non
+    if yes_no_mode:
+        ans = answer.strip().lower()
+        if "oui" in ans and "non" in ans:
+            answer = "Non"
+        elif "oui" in ans:
+            answer = "Oui"
+        elif "non" in ans:
+            answer = "Non"
+        else:
+            answer = "Je ne sais pas."
+
+    # Sauvegarde dans l'historique
+    history.append((query, answer))
+
+    # Affichage final
+    print("\nAnswer:\n", answer)

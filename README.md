@@ -14,25 +14,25 @@ It is designed to reflect \*\*enterprise-grade AI agent architectures\*\*, with 
 
 
 
-\## 🚀 Key Features
+\##  Key Features
 
 
 
-\- 🔒 \*\*Fully local inference\*\* (no external APIs, no data leakage)
+\-  \*\*Fully local inference\*\* (no external APIs, no data leakage)
 
-\- 🤖 LLM-powered question answering using \*\*Ollama\*\*
+\-  LLM-powered question answering using \*\*Ollama\*\*
 
-\- 📚 Retrieval-Augmented Generation (RAG) with \*\*source attribution\*\*
+\-  Retrieval-Augmented Generation (RAG) with \*\*source attribution\*\*
 
-\- 🧠 Semantic search with \*\*ChromaDB\*\*
+\-  Semantic search with \*\*ChromaDB\*\*
 
-\- 📄 Multi-PDF ingestion pipeline
+\-  Multi-PDF ingestion pipeline
 
-\- 🌐 REST API exposed via \*\*FastAPI\*\*
+\-  REST API exposed via \*\*FastAPI\*\*
 
-\- 🧪 Interactive CLI + API usage
+\-  Interactive CLI + API usage
 
-\- 🏗️ Clean, modular, production-oriented codebase
+\-  Clean, modular, production-oriented codebase
 
 
 
@@ -40,7 +40,7 @@ It is designed to reflect \*\*enterprise-grade AI agent architectures\*\*, with 
 
 
 
-\## 🧠 Architecture Overview
+\##  Architecture Overview
 
 
 

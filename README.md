@@ -1,65 +1,76 @@
-## AI Knowledge Assistant with RAG (Local & Free)
+\# AI Knowledge Assistant – Local RAG System (Ollama + LangChain)
 
-This project implements a Retrieval-Augmented Generation (RAG) system that allows users to query their own documents (PDF files) and receive accurate, grounded, and context-aware answers.
 
-The system is designed to be 100% local, privacy-friendly, and cost-free, relying exclusively on open-source tools widely used in modern AI and enterprise environments.
 
- ## Key Features
+This project implements a \*\*100% local, cost-free Retrieval-Augmented Generation (RAG) system\*\* that allows users to query their own documents (PDFs) and receive \*\*grounded, source-backed answers\*\*.
 
-Local Large Language Model (LLM) inference using Ollama
 
-Retrieval-Augmented Generation (RAG) for factual, source-grounded responses
 
-Semantic vector search powered by ChromaDB
+It is designed to reflect \*\*enterprise-grade AI agent architectures\*\*, with a focus on reliability, transparency, and data privacy.
 
-Open-source embeddings via Hugging Face sentence-transformers
 
-PDF document ingestion and chunking
 
-Persistent local vector storage
+---
 
-No external APIs, no API keys, no paid services
 
-## Technology Stack
-Component	Tool
-LLM	Ollama (Mistral / LLaMA / Phi)
-Embeddings	sentence-transformers (Hugging Face)
-Vector Database	ChromaDB
-RAG Framework	LangChain
-Document Loader	PyPDF2
-Language	Python
-## Project Structure
-ai-knowledge-assistant-rag/
-│
-├── data/                  # PDFs to ingest
-│   └── .gitkeep
-│
-├── vectorstore/            # Persistent ChromaDB storage
-│
-├── rag_ingestion.py        # Document ingestion & embeddings
-├── requirements.txt        # Python dependencies
-└── README.md
 
-## How It Works
+\## 🚀 Key Features
 
-PDFs are loaded from the data/ directory
 
-Documents are split into overlapping text chunks
 
-Embeddings are generated locally using Hugging Face models
+\- 🔒 \*\*Fully local inference\*\* (no external APIs, no data leakage)
 
-Chunks are stored in ChromaDB for semantic retrieval
+\- 🤖 LLM-powered question answering using \*\*Ollama\*\*
 
-Retrieved context is later passed to a local LLM via Ollama
+\- 📚 Retrieval-Augmented Generation (RAG) with \*\*source attribution\*\*
 
-## Objective
+\- 🧠 Semantic search with \*\*ChromaDB\*\*
 
-This project demonstrates a production-ready local RAG pipeline, suitable for:
+\- 📄 Multi-PDF ingestion pipeline
 
-AI portfolio projects
+\- 🌐 REST API exposed via \*\*FastAPI\*\*
 
-Enterprise knowledge assistants
+\- 🧪 Interactive CLI + API usage
 
-Secure / offline environments
+\- 🏗️ Clean, modular, production-oriented codebase
 
-Applied AI & MLOps learning
+
+
+---
+
+
+
+\## 🧠 Architecture Overview
+
+
+
+```text
+
+PDF Documents
+
+&nbsp;    ↓
+
+Text Splitting (LangChain)
+
+&nbsp;    ↓
+
+Embeddings (Hugging Face)
+
+&nbsp;    ↓
+
+Vector Store (ChromaDB)
+
+&nbsp;    ↓
+
+Retriever
+
+&nbsp;    ↓
+
+LLM (Ollama – Mistral / LLaMA)
+
+&nbsp;    ↓
+
+Answer + Sources
+
+
+
